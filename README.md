@@ -62,6 +62,7 @@ Workflow 会：
    - `release/markdown-editor-<version>.zip`
    - `release/markdown-editor-<version>.zip.sha256`
 5. 创建 GitHub Release 并上传 zip / sha256
+6. 更新 `Work-Agent/PluginRegistry` 的 `plugins/markdown-editor.json`，并向该仓库提交 PR
 
 如果 `WorkStudio` 是私有仓库，需要在当前仓库的 Actions secrets 里配置：
 
