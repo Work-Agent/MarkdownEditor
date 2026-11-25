@@ -55,8 +55,8 @@ git push origin 0.1
 
 Workflow 会：
 
-1. checkout 本插件和 `Work-Agent/WorkStudio`
-2. 在 CI 里安装并构建未发布的 `@workstudio/sdk`
+1. checkout 本插件
+2. 从 npm 安装已发布的 `@work-studio/sdk`
 3. 安装本插件依赖、typecheck、build
 4. 生成最小清单的安装包：
    - `release/markdown-editor-<version>.zip`
@@ -64,9 +64,8 @@ Workflow 会：
 5. 创建 GitHub Release 并上传 zip / sha256
 6. 更新 `Work-Agent/PluginRegistry` 的 `plugins/markdown-editor.json`，并向该仓库提交 PR
 
-如果 `WorkStudio` 是私有仓库，需要在当前仓库的 Actions secrets 里配置：
+Release 需要配置：
 
-- `WORKSTUDIO_TOKEN`：对 `Work-Agent/WorkStudio` 至少 `contents: read`
 - `PLUGIN_REGISTRY_TOKEN`：对 `Work-Agent/PluginRegistry` 至少 `contents: write` + `pull-requests: write`
 
 Release 完成后会自动向 `Work-Agent/PluginRegistry` 提交 PR，更新

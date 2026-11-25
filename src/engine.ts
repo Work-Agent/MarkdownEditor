@@ -1,7 +1,7 @@
 /**
  * Markdown editor 的插件引擎：资源适配器 + 保存 / 资源 / 图片命令。
  *
- * 页面只通过 @workstudio/sdk/global 的 bridge 调命令；写入统一走
+ * 页面只通过 @work-studio/sdk/global 的 bridge 调命令；写入统一走
  * markdown-editor.save，图片与富媒体统一走 asset / writeImage。
  * Agent 读取 Markdown 时也使用同一份 resource adapter。
  */
@@ -16,7 +16,7 @@ import {
   sep,
 } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { definePlugin } from '@workstudio/sdk';
+import { definePlugin } from '@work-studio/sdk';
 
 const MAX_ASSET_BYTES = 24 * 1024 * 1024;
 const MAX_FILES = 600;

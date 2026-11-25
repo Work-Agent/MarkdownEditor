@@ -4,7 +4,7 @@
  * WorkStudio 内由 preload 注入真正的 window.workStudio；这里只在缺失时
  * 提供一份内存实现，方便 `vite` 预览与截图，不影响宿主加载。
  */
-import type { WorkStudioBridge } from '@workstudio/sdk';
+import type { WorkStudioBridge } from '@work-studio/sdk';
 
 const IMAGE =
   'data:image/svg+xml;base64,' +

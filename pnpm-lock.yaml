@@ -41,9 +41,9 @@ importers:
       '@lezer/markdown':
         specifier: ^1.8.1
         version: 1.8.1
-      '@workstudio/sdk':
-        specifier: file:../WorkStudio/packages/sdk
-        version: file:../WorkStudio/packages/sdk
+      '@work-studio/sdk':
+        specifier: 0.1.0
+        version: 0.1.0
       katex:
         specifier: ^0.19.1
         version: 0.19.1
@@ -342,8 +342,8 @@ packages:
   '@types/node@26.6.6':
     resolution: {integrity: sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==}
 
-  '@workstudio/sdk@file:../WorkStudio/packages/sdk':
-    resolution: {directory: ../WorkStudio/packages/sdk, type: directory}
+  '@work-studio/sdk@0.1.0':
+    resolution: {integrity: sha512-YOziTMf/uCWYRWqsDuNZbtI4M9D1lvTAobdxTrQkAXYJWlV4aGtwErCriPsnCbcpnCXYVkB9PKUIbBEkjbdP4A==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -985,7 +985,7 @@ snapshots:
     dependencies:
       undici-types: 8.9.0
 
-  '@workstudio/sdk@file:../WorkStudio/packages/sdk': {}
+  '@work-studio/sdk@0.1.0': {}
 
   commander@15.1.0: {}
 

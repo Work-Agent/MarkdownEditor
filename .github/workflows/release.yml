@@ -27,27 +27,6 @@ jobs:
           path: plugin
           fetch-depth: 0
 
-      # SDK 目前没有发 npm；从 WorkStudio 源码构建后，让
-      # file:../WorkStudio/packages/sdk 依赖在 CI 里可解析。
-      # WorkStudio 与插件仓库分离；WorkStudio 是私有仓库时，
-      # 需要 WORKSTUDIO_TOKEN（至少 contents: read）才能 checkout。
-      - name: Check WorkStudio access token
-        env:
-          WORKSTUDIO_TOKEN: ${{ secrets.WORKSTUDIO_TOKEN }}
-        run: |
-          if [ -z "$WORKSTUDIO_TOKEN" ]; then
-            echo "::error::Missing WORKSTUDIO_TOKEN secret with read access to Work-Agent/WorkStudio."
-            exit 1
-          fi
-
-      - name: Checkout WorkStudio SDK
-        uses: actions/checkout@v7
-        with:
-          repository: Work-Agent/WorkStudio
-          path: WorkStudio
-          fetch-depth: 1
-          token: ${{ secrets.WORKSTUDIO_TOKEN }}
-
       - name: Check PluginRegistry access token
         env:
           PLUGIN_REGISTRY_TOKEN: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
@@ -67,17 +46,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: |
-            plugin/pnpm-lock.yaml
-            WorkStudio/pnpm-lock.yaml
-
-      - name: Build WorkStudio SDK
-        working-directory: WorkStudio
-        run: |
-          set -euo pipefail
-          # ignore-scripts 跳过 electron 二进制下载；这里只需要 SDK 的 tsc。
-          pnpm install --frozen-lockfile --ignore-scripts
-          pnpm --filter @workstudio/sdk build
+          cache-dependency-path: plugin/pnpm-lock.yaml
 
       - name: Install plugin dependencies
         working-directory: plugin

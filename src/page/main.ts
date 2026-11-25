@@ -1,4 +1,4 @@
-import '@workstudio/sdk/global';
+import '@work-studio/sdk/global';
 import './mock';
 import 'katex/dist/katex.min.css';
 import './style.css';
