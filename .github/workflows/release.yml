@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout plugin
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: plugin
           fetch-depth: 0
@@ -41,7 +41,7 @@ jobs:
           fi
 
       - name: Checkout WorkStudio SDK
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: Work-Agent/WorkStudio
           path: WorkStudio
@@ -58,12 +58,12 @@ jobs:
           fi
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10.18.0
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -140,7 +140,7 @@ jobs:
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           files: |
@@ -148,7 +148,7 @@ jobs:
             plugin/release/*.sha256
 
       - name: Checkout plugin registry
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: Work-Agent/PluginRegistry
           path: PluginRegistry
