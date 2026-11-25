@@ -43,6 +43,36 @@ api.d.ts
 
 依赖全部打包进 `dist`，安装时不需要执行 npm。
 
+## 发布
+
+打 tag 会触发 `.github/workflows/release.yml`：
+
+```bash
+git tag -a 0.1 -m "Release 0.1"
+git push origin main
+git push origin 0.1
+```
+
+Workflow 会：
+
+1. checkout 本插件和 `Work-Agent/WorkStudio`
+2. 在 CI 里安装并构建未发布的 `@workstudio/sdk`
+3. 安装本插件依赖、typecheck、build
+4. 生成最小清单的安装包：
+   - `release/markdown-editor-<version>.zip`
+   - `release/markdown-editor-<version>.zip.sha256`
+5. 创建 GitHub Release 并上传 zip / sha256
+
+如果 `WorkStudio` 是私有仓库，需要在当前仓库的 Actions secrets 里配置
+`WORKSTUDIO_TOKEN`（至少 `contents: read`）。
+
+本地也可以直接打包：
+
+```bash
+pnpm build
+pnpm pack:plugin
+```
+
 ## 安装
 
 把整个仓库目录作为本地插件安装到 WorkStudio，或 `pnpm build` 后打 zip 安装。
