@@ -1,0 +1,90 @@
+{
+  "commands": [
+    {
+      "name": "markdown-editor.save",
+      "summary": "保存 Markdown 内容",
+      "args": {
+        "ref": {
+          "type": "string",
+          "required": true
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "exitCodes": {
+        "ok": 0,
+        "failed": 1,
+        "invalid": 2,
+        "notFound": 3
+      }
+    },
+    {
+      "name": "markdown-editor.readAsset",
+      "summary": "读取图片 / 媒体资源并返回 data URL",
+      "args": {
+        "ref": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "exitCodes": {
+        "ok": 0,
+        "failed": 1,
+        "invalid": 2,
+        "notFound": 3
+      }
+    },
+    {
+      "name": "markdown-editor.writeImage",
+      "summary": "把粘贴 / 选择的图片写入文档同级的 media 目录",
+      "args": {
+        "ref": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "mime": {
+          "type": "string",
+          "required": true
+        },
+        "data": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "exitCodes": {
+        "ok": 0,
+        "failed": 1,
+        "invalid": 2,
+        "notFound": 3
+      }
+    },
+    {
+      "name": "markdown-editor.files",
+      "summary": "列出工作区中的 Markdown 与媒体文件（链接补全用）",
+      "args": {
+        "root": {
+          "type": "string",
+          "required": true
+        },
+        "query": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "number"
+        }
+      },
+      "exitCodes": {
+        "ok": 0,
+        "failed": 1,
+        "invalid": 2,
+        "notFound": 3
+      }
+    }
+  ]
+}

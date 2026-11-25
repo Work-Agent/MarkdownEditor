@@ -1,0 +1,62 @@
+{
+  "commands": [
+    {
+      "name": "markdown-editor.save",
+      "args": {
+        "ref": {
+          "type": "string",
+          "required": true
+        },
+        "content": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "markdown-editor.readAsset",
+      "args": {
+        "ref": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "markdown-editor.writeImage",
+      "args": {
+        "ref": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "mime": {
+          "type": "string",
+          "required": true
+        },
+        "data": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "markdown-editor.files",
+      "args": {
+        "root": {
+          "type": "string",
+          "required": true
+        },
+        "query": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "number"
+        }
+      }
+    }
+  ]
+}

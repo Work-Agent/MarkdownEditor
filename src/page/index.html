@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Markdown 编辑器</title>
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="md-header">
+        <div class="md-title-wrap">
+          <div id="title" class="md-title">Markdown</div>
+          <span id="dirty" class="md-dirty" aria-live="polite"></span>
+        </div>
+        <div id="toolbar" class="md-toolbar"></div>
+        <button id="save" type="button" class="md-save">保存</button>
+      </header>
+
+      <div id="conflict" class="md-conflict" hidden>
+        <span>文件已在外部更新。</span>
+        <button id="conflict-reload" type="button">重新加载</button>
+        <button id="conflict-keep" type="button" class="ghost">保留我的修改</button>
+      </div>
+
+      <main class="md-main">
+        <div id="editor" class="md-editor" role="textbox" aria-multiline="true"></div>
+        <aside id="outline" class="md-outline" hidden>
+          <div class="md-outline-head">
+            <span>大纲</span>
+            <button id="outline-close" type="button" aria-label="关闭大纲">×</button>
+          </div>
+          <div id="outline-list" class="md-outline-list"></div>
+        </aside>
+      </main>
+
+      <footer class="md-footer">
+        <span id="status" class="md-status">就绪</span>
+        <span id="count" class="md-count"></span>
+      </footer>
+    </div>
+
+    <div id="lightbox" class="md-lightbox" hidden>
+      <button id="lightbox-close" class="md-lightbox-close" type="button" aria-label="关闭">×</button>
+      <img id="lightbox-image" alt="" />
+    </div>
+
+    <input id="image-picker" type="file" accept="image/*,video/*,audio/*" hidden />
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
