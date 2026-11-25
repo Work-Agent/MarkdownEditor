@@ -64,9 +64,16 @@ Workflow 会：
 5. 创建 GitHub Release 并上传 zip / sha256
 6. 更新 `Work-Agent/PluginRegistry` 的 `plugins/markdown-editor.json`，并向该仓库提交 PR
 
-Release 需要配置：
+Release 需要配置 GitHub App：
 
-- `PLUGIN_REGISTRY_TOKEN`：对 `Work-Agent/PluginRegistry` 至少 `contents: write` + `pull-requests: write`
+- 在 `Work-Agent/PluginRegistry` 上安装 App，权限 `Contents: write` + `Pull requests: write`
+- 在 MarkdownEditor 的 Actions secrets 中配置：
+  - `REGISTRY_APP_CLIENT_ID`
+  - `REGISTRY_APP_PRIVATE_KEY`（App 私钥全文）
+
+`REGISTRY_APP_CLIENT_ID` 也可以放 Actions variable。`REGISTRY_APP_PRIVATE_KEY`
+只能放 secret。GitHub Free 下 Organization secret 不能用于私有仓库；MarkdownEditor
+是 public 时可用 Organization secret（需选中该仓库），是 private 时请用 Repository secret。
 
 Release 完成后会自动向 `Work-Agent/PluginRegistry` 提交 PR，更新
 `plugins/markdown-editor.json`。

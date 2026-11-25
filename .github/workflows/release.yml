@@ -27,14 +27,26 @@ jobs:
           path: plugin
           fetch-depth: 0
 
-      - name: Check PluginRegistry access token
+      - name: Check PluginRegistry App secrets
         env:
-          PLUGIN_REGISTRY_TOKEN: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
+          APP_CLIENT_ID: ${{ secrets.REGISTRY_APP_CLIENT_ID || vars.REGISTRY_APP_CLIENT_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.REGISTRY_APP_PRIVATE_KEY }}
         run: |
-          if [ -z "$PLUGIN_REGISTRY_TOKEN" ]; then
-            echo "::error::Missing PLUGIN_REGISTRY_TOKEN secret with contents/pull-request write access to Work-Agent/PluginRegistry."
+          if [ -z "$APP_CLIENT_ID" ] || [ -z "$APP_PRIVATE_KEY" ]; then
+            echo "::error::Missing REGISTRY_APP_CLIENT_ID / REGISTRY_APP_PRIVATE_KEY."
             exit 1
           fi
+
+      - name: Create PluginRegistry app token
+        id: registry-app
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.REGISTRY_APP_CLIENT_ID || vars.REGISTRY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.REGISTRY_APP_PRIVATE_KEY }}
+          owner: Work-Agent
+          repositories: PluginRegistry
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -121,7 +133,7 @@ jobs:
         with:
           repository: Work-Agent/PluginRegistry
           path: PluginRegistry
-          token: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
+          token: ${{ steps.registry-app.outputs.token }}
           fetch-depth: 0
 
       - name: Write plugin registry entry
@@ -140,7 +152,7 @@ jobs:
       - name: Open PluginRegistry pull request
         uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
+          token: ${{ steps.registry-app.outputs.token }}
           path: PluginRegistry
           base: main
           branch: release/markdown-editor-${{ steps.meta.outputs.version }}
