@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -46,6 +47,15 @@ jobs:
           path: WorkStudio
           fetch-depth: 1
           token: ${{ secrets.WORKSTUDIO_TOKEN }}
+
+      - name: Check PluginRegistry access token
+        env:
+          PLUGIN_REGISTRY_TOKEN: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
+        run: |
+          if [ -z "$PLUGIN_REGISTRY_TOKEN" ]; then
+            echo "::error::Missing PLUGIN_REGISTRY_TOKEN secret with contents/pull-request write access to Work-Agent/PluginRegistry."
+            exit 1
+          fi
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -117,6 +127,18 @@ jobs:
             });
           "
 
+      - name: Read release metadata
+        id: meta
+        working-directory: plugin
+        run: |
+          set -euo pipefail
+          ZIP="$(basename "$(ls release/*.zip | head -n1)")"
+          VERSION="$(node -p "require('./package.json').version")"
+          SHA="$(tr -d '[:space:]' < "release/${ZIP}.sha256")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -124,3 +146,43 @@ jobs:
           files: |
             plugin/release/*.zip
             plugin/release/*.sha256
+
+      - name: Checkout plugin registry
+        uses: actions/checkout@v4
+        with:
+          repository: Work-Agent/PluginRegistry
+          path: PluginRegistry
+          token: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
+          fetch-depth: 0
+
+      - name: Write plugin registry entry
+        working-directory: plugin
+        env:
+          REGISTRY_DIR: ${{ github.workspace }}/PluginRegistry
+          SOURCE_URL: ${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/${{ steps.meta.outputs.zip }}
+          SHA256: ${{ steps.meta.outputs.sha }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: node scripts/write-registry-entry.mjs
+
+      - name: Validate plugin registry
+        working-directory: PluginRegistry
+        run: npm run validate
+
+      - name: Open PluginRegistry pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.PLUGIN_REGISTRY_TOKEN }}
+          path: PluginRegistry
+          base: main
+          branch: release/markdown-editor-${{ steps.meta.outputs.version }}
+          delete-branch: true
+          commit-message: "chore: add markdown-editor ${{ steps.meta.outputs.version }}"
+          title: "chore: add markdown-editor ${{ steps.meta.outputs.version }}"
+          body: |
+            Automated release from [${{ github.repository }}](${{ github.server_url }}/${{ github.repository }}).
+
+            - Release: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+            - Zip: ${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/${{ steps.meta.outputs.zip }}
+            - SHA256: `${{ steps.meta.outputs.sha }}`
+          add-paths: |
+            plugins/markdown-editor.json
